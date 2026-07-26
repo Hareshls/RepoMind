@@ -1,0 +1,16 @@
+# Python / Backend
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.repomind_memory.json
+**/repositories/
+**/knowledge/
+**/exports/
+**/*.docx
+**/*.html
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+**/.vite/

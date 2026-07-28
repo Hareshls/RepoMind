@@ -8,7 +8,6 @@ import {
   Trash2, 
   DownloadCloud, 
   Settings, 
-  Crown,
   ChevronRight
 } from 'lucide-react';
 
@@ -195,7 +194,7 @@ export default function Sidebar({
           </li>
           <li>
             <button 
-              onClick={() => window.open(`http://127.0.0.1:8000/export/doc?repo_url=${encodeURIComponent(activeRepoUrl || '')}`, '_blank')}
+              onClick={() => window.open(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/export/doc?repo_url=${encodeURIComponent(activeRepoUrl || '')}`, '_blank')}
               style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '12px', color: 'var(--text-secondary)', fontSize: '0.88rem', fontWeight: 500, cursor: 'pointer', background: 'transparent', border: 'none', width: '100%', textAlign: 'left' }}
             >
               <Download size={18} color="#3b82f6" /> Download Word (.docx)
@@ -203,7 +202,7 @@ export default function Sidebar({
           </li>
           <li>
             <button 
-              onClick={() => window.open(`http://127.0.0.1:8000/export/html?repo_url=${encodeURIComponent(activeRepoUrl || '')}`, '_blank')}
+              onClick={() => window.open(`${import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000'}/export/html?repo_url=${encodeURIComponent(activeRepoUrl || '')}`, '_blank')}
               style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 12px', borderRadius: '12px', color: 'var(--text-secondary)', fontSize: '0.88rem', fontWeight: 500, cursor: 'pointer', background: 'transparent', border: 'none', width: '100%', textAlign: 'left' }}
             >
               <Download size={18} color="#10b981" /> Download Report (.html)
@@ -218,42 +217,6 @@ export default function Sidebar({
             </button>
           </li>
         </ul>
-      </div>
-
-      {/* RepoMind Pro Banner */}
-      <div style={{
-        marginTop: 'auto',
-        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.1))',
-        border: '1px solid rgba(139, 92, 246, 0.3)',
-        borderRadius: '16px',
-        padding: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '10px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.95rem', color: 'white' }}>
-          <Crown size={18} color="#f59e0b" /> RepoMind Pro
-        </div>
-        <p style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', lineHeight: 1.4 }}>
-          Unlock advanced analytics, export, and more.
-        </p>
-        <button 
-          onClick={() => alert('RepoMind Pro coming soon! Currently running 100% free open-source Hybrid AI Engine.')}
-          style={{
-            width: '100%',
-            padding: '8px',
-            background: 'rgba(139, 92, 246, 0.25)',
-            border: '1px solid rgba(139, 92, 246, 0.4)',
-            color: 'white',
-            fontSize: '0.8rem',
-            fontWeight: 600,
-            borderRadius: '8px',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          Coming Soon
-        </button>
       </div>
     </aside>
   );

@@ -147,19 +147,7 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
 
   const currentLayerObj = ARCH_LAYERS.find(l => l.id === selectedLayer) || ARCH_LAYERS[0];
 
-  // Repository Insights Analytics Grid
-  const INSIGHT_METRICS = [
-    { label: 'Architecture Summary', val: data.architecture ? 'Decoupled & Modular' : 'Standard Layered', sub: 'Validated by RAG Agent', icon: Share2, color: '#818cf8' },
-    { label: 'Project Scale', val: data.files_analyzed ? (parseInt(data.files_analyzed) > 50 ? 'Large / Enterprise' : 'Moderate / Standard') : 'Analyzing...', sub: 'Repository complexity', icon: Activity, color: '#f472b6' },
-    { label: 'Folder Statistics', val: data.folders_analyzed ? `${data.folders_analyzed} Folders` : 'N/A', sub: 'Directory count', icon: FolderGit2, color: '#38bdf8' },
-    { label: 'File Statistics', val: `${data.files_analyzed || 'N/A'} Files`, sub: '100% Vector Indexed', icon: FileText, color: '#34d399' },
-    { label: 'Language Distribution', val: techStack.languages[0] || 'Analyzing...', sub: `${techStack.languages.length} languages detected`, icon: Code2, color: '#fbbf24' },
-    { label: 'Framework Detection', val: techStack.frameworks[0] || 'None detected', sub: `${techStack.frameworks.length} frameworks active`, icon: Hexagon, color: '#c084fc' },
-    { label: 'Dependency Analysis', val: `${displayDeps.length} Packages`, sub: 'Analyzed from manifests', icon: Package, color: '#fb923c' },
-    { label: 'API Count', val: data.api_endpoints ? `${data.api_endpoints.length} Endpoints` : '0 Endpoints', sub: 'REST / HTTP routing', icon: Globe, color: '#60a5fa' },
-    { label: 'Database Detection', val: techStack.databases[0] || 'None detected', sub: 'Persistence engines', icon: Database, color: '#f43f5e' },
-    { label: 'Authentication Detection', val: data.authentication || 'None detected', sub: 'Security contracts', icon: ShieldCheck, color: '#10b981' }
-  ];
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -179,7 +167,6 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
           { id: 'overview', label: 'Overview & Stats', icon: Activity },
           { id: 'tech', label: 'Technology Stack', icon: Hexagon },
           { id: 'flowchart', label: 'Interactive Architecture Flowchart', icon: Share2 },
-          { id: 'insights', label: 'Repository Insights', icon: BarChart3 },
           { id: 'docs', label: 'Repository Documentation', icon: BookOpen }
         ].map((tab) => {
           const Icon = tab.icon;
@@ -576,48 +563,6 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
         </div>
       )}
 
-      {/* ─────────────────────────────────────────────────────────────
-          TAB 4: REPOSITORY INSIGHTS ANALYTICS DASHBOARD
-         ───────────────────────────────────────────────────────────── */}
-      {(activeTab === 'insights' || activeTab === 'all') && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.3s ease' }}>
-          <div>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '4px' }}>
-              Automated Repository Insights
-            </h2>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-              Deep analytical metrics summarizing architectural complexity, folder structures, and security patterns.
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-            {INSIGHT_METRICS.map((item, idx) => {
-              const Icon = item.icon;
-              return (
-                <div key={idx} className="glass-panel" style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '12px', borderLeft: `4px solid ${item.color}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                      {item.label}
-                    </span>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(255, 255, 255, 0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: item.color }}>
-                      <Icon size={16} />
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-heading)' }}>
-                      {item.val}
-                    </span>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                      {item.sub}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* ─────────────────────────────────────────────────────────────
           TAB 5: COLLAPSIBLE REPOSITORY DOCUMENTATION (16 Chapters)

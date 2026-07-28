@@ -39,17 +39,18 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   const [selectedLayer, setSelectedLayer] = useState('frontend'); // For interactive flowchart
 
   const data = repoData || {};
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
   const meta = data.metadata || {
     name: data.repo ? data.repo.split('/').pop().replace('.git', '') : 'Repository Intelligence',
     description: data.project_description || 'An AI-analyzed GitHub repository codebase.',
     owner: data.repo ? data.repo.split('/')[3] || 'Unknown Owner' : 'Unknown Owner',
-    stars: 0,
-    forks: 0,
+    stars: 'N/A',
+    forks: 'N/A',
     primary_language: data.language || 'Analyzing...',
-    license: 'Open Source License',
-    default_branch: 'main',
-    last_updated: '2026-07-27',
-    size: '1.2 MB'
+    license: 'N/A',
+    default_branch: 'N/A',
+    last_updated: 'N/A',
+    size: 'N/A'
   };
 
   const rawTech = data.tech_stack || {};
@@ -70,7 +71,7 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   };
 
   const displayDeps = (Array.isArray(dependencies) && dependencies.length > 0) ? dependencies : (Array.isArray(data.dependencies) && data.dependencies.length > 0 ? data.dependencies : ['No third-party dependencies detected']);
-  const displayArch = archDescription || data.architecture || "Decoupled software architecture with modular separation between interface layers and persistent state.";
+  const displayArch = archDescription || data.architecture || "Architecture analysis pending.";
 
   // Helper arrays for flowchart layer separation without bleeding frameworks
   const feKeywords = ['react', 'vue', 'angular', 'next', 'vite', 'tailwind', 'bootstrap', 'framer', 'three', 'recharts', 'html', 'css', 'dom'];
@@ -94,10 +95,10 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   const apiTechList = apiRoutesList.length > 0 ? apiRoutesList.map(e => `${e.method} ${e.path}`) : ['Internal Application Routes'];
   const apiDetails = apiRoutesList.length > 0 ? `Exposes structured communication endpoints: ${apiRoutesList.map(e => `${e.method} ${e.path} (${e.summary || 'route handler'})`).join('; ')}` : 'Handles internal application routing and programmatic execution.';
 
-  const secTechList = (data.security_detected && data.security_detected.length > 0) ? data.security_detected : [data.authentication || 'API Key / Token Validation'];
-  const secDetails = `Enforces application security via: ${secTechList.join(', ')}. Protects against unauthorized access and unvalidated payloads without hardcoded session tokens.`;
+  const secTechList = (data.security_detected && data.security_detected.length > 0) ? data.security_detected : (data.authentication ? [data.authentication] : ['Security details not explicitly indexed']);
+  const secDetails = (data.security_detected && data.security_detected.length > 0) ? `Enforces application security via: ${secTechList.join(', ')}.` : 'Security implementation details pending or not fully indexed.';
 
-  const storageDetails = 'Handles document uploads (e.g. resume and job description files) in buffer for text extraction and serves bundled static UI assets.';
+  const storageDetails = data.storage_details || 'Storage mechanisms not explicitly detected.';
   const deployDetails = `Configured for runtime execution using package manifests (${techStack.package_managers.join(', ')}) and server environments (${techStack.cloud_devops.join(', ')}).`;
 
   // Parse documentation sections from summary_doc
@@ -128,22 +129,7 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   const docSections = parseDocSections(data.summary_doc || "");
   if (docSections.length === 0) {
     docSections.push(
-      { title: 'What the project is about', content: meta.name + " is an architectural system engineered primarily in " + meta.primary_language + ". " + meta.description },
-      { title: 'Features', content: "* Automated execution bootstrapped via `" + (data.entry_point || 'README.md') + "`.\n* Modular architecture ensuring developer ergonomics and testability." },
-      { title: 'Folder Structure', content: "* Root repository structure containing " + (data.files_analyzed || '25+') + " source code files and configuration modules." },
-      { title: 'Technology Stack', content: "* **Languages**: " + techStack.languages.join(', ') + "\n* **Frameworks**: " + techStack.frameworks.join(', ') + "\n* **Databases**: " + techStack.databases.join(', ') },
-      { title: 'System Architecture', content: "```text\nFrontend -> Backend -> Services -> Database -> External APIs\n```\n" + displayArch },
-      { title: 'Working of the Project', content: "1. Initialization and configuration binding.\n2. Request routing and security validation.\n3. Domain logic processing and persistence." },
-      { title: 'API Overview', content: "Handles structured communication and programmatic execution across service layers." },
-      { title: 'Modules', content: "Organized into decoupled presentation, domain, and data access layers." },
-      { title: 'Important Files', content: "1. `README.md` — Documentation and setup.\n2. `" + (data.entry_point || 'main') + "` — Lifecycle bootstrapping." },
-      { title: 'Entry Point', content: "The primary entry point is `" + (data.entry_point || 'README.md') + "`, which initializes core dependencies." },
-      { title: 'Dependencies', content: "Key dependencies include: " + displayDeps.slice(0, 10).join(', ') + "." },
-      { title: 'Environment Variables', content: "External configuration parameters and runtime secrets." },
-      { title: 'Database', content: "Persistent storage managed via " + (data.database || 'in-memory or file system models') + "." },
-      { title: 'Authentication', content: "Security contracts enforced using " + (data.authentication || 'standard OS isolation') + "." },
-      { title: 'Deployment', content: "Configured for execution on containerized or cloud runtime environments." },
-      { title: 'Conclusion', content: meta.name + " establishes a maintainable engineering foundation engineered for scalability." }
+      { title: 'Overview', content: "Repository documentation is currently being generated or no detailed summary is available." }
     );
   }
 
@@ -164,13 +150,13 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   // Repository Insights Analytics Grid
   const INSIGHT_METRICS = [
     { label: 'Architecture Summary', val: data.architecture ? 'Decoupled & Modular' : 'Standard Layered', sub: 'Validated by RAG Agent', icon: Share2, color: '#818cf8' },
-    { label: 'Complexity Summary', val: (parseInt(data.files_analyzed || 25) > 50) ? 'Enterprise High' : 'Moderate / Agile', sub: `${data.files_analyzed || '25'} files inspected`, icon: Activity, color: '#f472b6' },
-    { label: 'Folder Statistics', val: `${Math.max(4, Math.floor(parseInt(data.files_analyzed || 25) / 4))} Folders`, sub: 'Organized hierarchy', icon: FolderGit2, color: '#38bdf8' },
-    { label: 'File Statistics', val: `${data.files_analyzed || '25'} Files`, sub: '100% Vector Indexed', icon: FileText, color: '#34d399' },
-    { label: 'Language Distribution', val: techStack.languages[0] || 'Python', sub: `${techStack.languages.length} languages detected`, icon: Code2, color: '#fbbf24' },
-    { label: 'Framework Detection', val: techStack.frameworks[0] || 'Standard SDK', sub: `${techStack.frameworks.length} frameworks active`, icon: Hexagon, color: '#c084fc' },
+    { label: 'Complexity Summary', val: data.files_analyzed ? `${data.files_analyzed} Files` : 'Analyzing...', sub: `Total files inspected`, icon: Activity, color: '#f472b6' },
+    { label: 'Folder Statistics', val: data.folders_analyzed ? `${data.folders_analyzed} Folders` : 'N/A', sub: 'Directory count', icon: FolderGit2, color: '#38bdf8' },
+    { label: 'File Statistics', val: `${data.files_analyzed || 'N/A'} Files`, sub: '100% Vector Indexed', icon: FileText, color: '#34d399' },
+    { label: 'Language Distribution', val: techStack.languages[0] || 'Analyzing...', sub: `${techStack.languages.length} languages detected`, icon: Code2, color: '#fbbf24' },
+    { label: 'Framework Detection', val: techStack.frameworks[0] || 'None detected', sub: `${techStack.frameworks.length} frameworks active`, icon: Hexagon, color: '#c084fc' },
     { label: 'Dependency Analysis', val: `${displayDeps.length} Packages`, sub: 'Analyzed from manifests', icon: Package, color: '#fb923c' },
-    { label: 'API Count', val: `${(data.api_endpoints || []).length || '12'} Endpoints`, sub: 'REST / HTTP routing', icon: Globe, color: '#60a5fa' },
+    { label: 'API Count', val: data.api_endpoints ? `${data.api_endpoints.length} Endpoints` : '0 Endpoints', sub: 'REST / HTTP routing', icon: Globe, color: '#60a5fa' },
     { label: 'Database Detection', val: techStack.databases[0] || 'None detected', sub: 'Persistence engines', icon: Database, color: '#f43f5e' },
     { label: 'Authentication Detection', val: data.authentication || 'None detected', sub: 'Security contracts', icon: ShieldCheck, color: '#10b981' }
   ];
@@ -650,13 +636,13 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
 
             <div style={{ display: 'flex', gap: '10px' }}>
               <button 
-                onClick={() => window.open(`http://127.0.0.1:8000/export/doc?repo_url=${encodeURIComponent(data.repo || '')}`, '_blank')}
+                onClick={() => window.open(`${apiUrl}/export/doc?repo_url=${encodeURIComponent(data.repo || '')}`, '_blank')}
                 style={{ background: 'rgba(59, 130, 246, 0.2)', border: '1px solid rgba(59, 130, 246, 0.4)', color: '#93c5fd', padding: '8px 16px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <FileText size={16} /> Download Word (.docx)
               </button>
               <button 
-                onClick={() => window.open(`http://127.0.0.1:8000/export/html?repo_url=${encodeURIComponent(data.repo || '')}`, '_blank')}
+                onClick={() => window.open(`${apiUrl}/export/html?repo_url=${encodeURIComponent(data.repo || '')}`, '_blank')}
                 style={{ background: 'rgba(16, 185, 129, 0.2)', border: '1px solid rgba(16, 185, 129, 0.4)', color: '#6ee7b7', padding: '8px 16px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
               >
                 <Globe size={16} /> Download Report (.html)

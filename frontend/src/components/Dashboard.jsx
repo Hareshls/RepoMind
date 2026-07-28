@@ -150,7 +150,7 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
   // Repository Insights Analytics Grid
   const INSIGHT_METRICS = [
     { label: 'Architecture Summary', val: data.architecture ? 'Decoupled & Modular' : 'Standard Layered', sub: 'Validated by RAG Agent', icon: Share2, color: '#818cf8' },
-    { label: 'Complexity Summary', val: data.files_analyzed ? `${data.files_analyzed} Files` : 'Analyzing...', sub: `Total files inspected`, icon: Activity, color: '#f472b6' },
+    { label: 'Project Scale', val: data.files_analyzed ? (parseInt(data.files_analyzed) > 50 ? 'Large / Enterprise' : 'Moderate / Standard') : 'Analyzing...', sub: 'Repository complexity', icon: Activity, color: '#f472b6' },
     { label: 'Folder Statistics', val: data.folders_analyzed ? `${data.folders_analyzed} Folders` : 'N/A', sub: 'Directory count', icon: FolderGit2, color: '#38bdf8' },
     { label: 'File Statistics', val: `${data.files_analyzed || 'N/A'} Files`, sub: '100% Vector Indexed', icon: FileText, color: '#34d399' },
     { label: 'Language Distribution', val: techStack.languages[0] || 'Analyzing...', sub: `${techStack.languages.length} languages detected`, icon: Code2, color: '#fbbf24' },
@@ -253,10 +253,10 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
 
               <div style={{ display: 'flex', gap: '10px' }}>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 600, color: '#fcd34d' }}>
-                  <Star size={15} /> {meta.stars.toLocaleString()} Stars
+                  <Star size={15} /> {typeof meta.stars === 'number' ? meta.stars.toLocaleString() : meta.stars} Stars
                 </span>
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255, 255, 255, 0.08)', border: '1px solid var(--border-color)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 600, color: '#93c5fd' }}>
-                  <GitFork size={15} /> {meta.forks.toLocaleString()} Forks
+                  <GitFork size={15} /> {typeof meta.forks === 'number' ? meta.forks.toLocaleString() : meta.forks} Forks
                 </span>
               </div>
             </div>
@@ -272,8 +272,8 @@ export default function Dashboard({ repoData, archDescription, dependencies }) {
               { label: 'Repository Name', val: meta.name, sub: 'Target repository', icon: FolderGit2, col: '#818cf8' },
               { label: 'Owner', val: meta.owner, sub: 'GitHub Account', icon: User, col: '#38bdf8' },
               { label: 'Primary Language', val: meta.primary_language, sub: 'Detected syntax', icon: Code2, col: '#f472b6' },
-              { label: 'Stars', val: (typeof meta.stars === 'number' ? meta.stars : 0).toLocaleString(), sub: 'Community rating', icon: Star, col: '#fbbf24' },
-              { label: 'Forks', val: (typeof meta.forks === 'number' ? meta.forks : 0).toLocaleString(), sub: 'Code copies', icon: GitFork, col: '#60a5fa' },
+              { label: 'Stars', val: typeof meta.stars === 'number' ? meta.stars.toLocaleString() : meta.stars, sub: 'Community rating', icon: Star, col: '#fbbf24' },
+              { label: 'Forks', val: typeof meta.forks === 'number' ? meta.forks.toLocaleString() : meta.forks, sub: 'Code copies', icon: GitFork, col: '#60a5fa' },
               { label: 'License', val: meta.license, sub: 'Legal distribution', icon: ShieldCheck, col: '#34d399' },
               { label: 'Default Branch', val: meta.default_branch, sub: 'Active git tree', icon: Terminal, col: '#c084fc' },
               { label: 'Last Updated', val: meta.last_updated, sub: 'Latest commit timestamp', icon: Calendar, col: '#fb923c' },
